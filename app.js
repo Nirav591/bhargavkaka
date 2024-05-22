@@ -3,6 +3,6 @@ var app = express();
 app.get('/', function (req, res) {
   res.send('Hello Nirav!');
 });
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.listen(6340, function () {
+  console.log('Example app listening on port 6340!');
 });
