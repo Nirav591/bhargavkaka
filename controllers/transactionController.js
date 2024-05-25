@@ -1,23 +1,26 @@
 const db = require('../config/db');
 
-// Add a transaction (credit or debit)
-exports.addTransaction = (req, res) => {
-  const { customer_id, type, amount } = req.body;
+// Add multiple transactions (credit or debit)
+exports.addTransactions = (req, res) => {
+  const transactions = req.body.transactions; // Array of transactions
 
-  db.query(
-    'INSERT INTO transactions (customer_id, type, amount) VALUES (?, ?, ?)',
-    [customer_id, type, amount],
-    (err, result) => {
-      if (err) {
-        res.status(500).json({ message: 'Error occurred while adding transaction' });
-      } else {
-        res.status(201).json({ message: 'Transaction added successfully' });
-      }
+  if (!Array.isArray(transactions) || transactions.length === 0) {
+    return res.status(400).json({ message: 'Invalid transactions data' });
+  }
+
+  const query = 'INSERT INTO transactions (customer_id, type, amount) VALUES ?';
+  const values = transactions.map((t) => [t.customer_id, t.type, t.amount]);
+
+  db.query(query, [values], (err, result) => {
+    if (err) {
+      res.status(500).json({ message: 'Error occurred while adding transactions' });
+    } else {
+      res.status(201).json({ message: 'Transactions added successfully' });
     }
-  );
+  });
 };
 
-// Get all transactions for a customer
+// Get all transactions for a customer along with total credit and debit
 exports.getCustomerTransactions = (req, res) => {
   const { id } = req.params;
 
