@@ -54,3 +54,13 @@ exports.getCustomerDetails = (req, res) => {
     }
   });
 };
+
+exports.getAllCustomers = (req, res) => {
+  db.query('SELECT * FROM customers', (err, result) => {
+    if (err) {
+      res.status(500).json({ message: 'Error occurred while fetching customers' });
+    } else {
+      res.status(200).json({ customers: result });
+    }
+  });
+};
