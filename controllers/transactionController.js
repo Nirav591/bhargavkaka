@@ -48,3 +48,16 @@ exports.getCustomerTransactions = (req, res) => {
     }
   });
 };
+
+
+exports.deleteTransaction = (req, res) => {
+  const { id } = req.params;
+
+  db.query('DELETE FROM transactions WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      res.status(500).json({ message: 'Error occurred while deleting transaction' });
+    } else {
+      res.status(200).json({ message: 'Transaction deleted successfully' });
+    }
+  });
+};
