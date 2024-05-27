@@ -61,3 +61,25 @@ exports.deleteTransaction = (req, res) => {
     }
   });
 };
+
+
+// Update a transaction by ID
+exports.updateTransaction = (req, res) => {
+  const { id } = req.params; // Transaction ID
+  const { reason, amount } = req.body; // Updated reason and amount
+
+  // Check if the ID and updated data are provided
+  if (!id || !reason || !amount) {
+    return res.status(400).json({ message: 'Transaction ID, reason, and amount are required' });
+  }
+
+  // Update the transaction in the database
+  db.query('UPDATE transactions SET reason = ?, amount = ? WHERE id = ?', [reason, amount, id], (err, result) => {
+    if (err) {
+      console.error('Error updating transaction:', err);
+      res.status(500).json({ message: 'Error updating transaction' });
+    } else {
+      res.status(200).json({ message: 'Transaction updated successfully' });
+    }
+  });
+};
