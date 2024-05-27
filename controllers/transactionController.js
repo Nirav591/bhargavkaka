@@ -8,6 +8,14 @@ exports.addTransactions = (req, res) => {
     return res.status(400).json({ message: 'Invalid transactions data' });
   }
 
+  const isValidTransaction = transactions.every(t =>
+    t.customer_id && t.type && (t.type === 'credit' || t.type === 'debit') && typeof t.amount === 'number' && t.reason
+  );
+
+  if (!isValidTransaction) {
+    return res.status(400).json({ message: 'Invalid transaction details' });
+  }
+
   const query = 'INSERT INTO transactions (customer_id, type, amount, reason) VALUES ?';
   const values = transactions.map(t => [t.customer_id, t.type, t.amount, t.reason]);
 
@@ -23,6 +31,10 @@ exports.addTransactions = (req, res) => {
 // Get all transactions for a customer along with total credit and debit
 exports.getCustomerTransactions = (req, res) => {
   const { id } = req.params;
+
+  if (!id || isNaN(id)) {
+    return res.status(400).json({ message: 'Invalid customer ID' });
+  }
 
   db.query('SELECT * FROM transactions WHERE customer_id = ?', [id], (err, transactions) => {
     if (err) {
@@ -49,9 +61,13 @@ exports.getCustomerTransactions = (req, res) => {
   });
 };
 
-
+// Delete a transaction by ID
 exports.deleteTransaction = (req, res) => {
   const { id } = req.params;
+
+  if (!id || isNaN(id)) {
+    return res.status(400).json({ message: 'Invalid transaction ID' });
+  }
 
   db.query('DELETE FROM transactions WHERE id = ?', [id], (err, result) => {
     if (err) {
@@ -62,11 +78,14 @@ exports.deleteTransaction = (req, res) => {
   });
 };
 
-
 // Update a transaction by ID
 exports.updateTransaction = (req, res) => {
   const { id } = req.params;
   const { reason, amount } = req.body;
+
+  if (!id || isNaN(id) || typeof reason !== 'string' || typeof amount !== 'number') {
+    return res.status(400).json({ message: 'Invalid transaction data' });
+  }
 
   db.query(
     'UPDATE transactions SET reason = ?, amount = ? WHERE id = ?',
