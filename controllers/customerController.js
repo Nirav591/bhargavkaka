@@ -64,3 +64,22 @@ exports.getAllCustomers = (req, res) => {
     }
   });
 };
+
+
+exports.deleteCustomer = (req, res) => {
+  const { id } = req.params;
+
+  db.query('DELETE FROM details WHERE customer_id = ?', [id], (err, result) => {
+    if (err) {
+      res.status(500).json({ message: 'Error occurred while deleting associated details' });
+    } else {
+      db.query('DELETE FROM customers WHERE id = ?', [id], (err, result) => {
+        if (err) {
+          res.status(500).json({ message: 'Error occurred while deleting customer' });
+        } else {
+          res.status(200).json({ message: 'Customer deleted successfully' });
+        }
+      });
+    }
+  });
+};
