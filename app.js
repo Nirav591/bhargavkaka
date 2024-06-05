@@ -9,7 +9,7 @@ const app = express();
 const port = 6350;
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://bhargavkaka.libertyworld.in'],
+  origin: ['http://localhost:3000', 'https://bhargavkaka.libertyworld.in', 'http://localhost:3001'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
