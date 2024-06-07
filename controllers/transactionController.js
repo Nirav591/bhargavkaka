@@ -8,8 +8,8 @@ exports.addTransactions = (req, res) => {
     return res.status(400).json({ message: 'Invalid transactions data' });
   }
 
-  const query = 'INSERT INTO transactions (customer_id, type, amount, reason) VALUES ?';
-  const values = transactions.map(t => [t.customer_id, t.type, t.amount, t.reason]);
+  const query = 'INSERT INTO transactions (customer_id, type, amount, reason, date) VALUES ?';
+  const values = transactions.map(t => [t.customer_id, t.type, t.amount, t.reason, t.date]);
 
   db.query(query, [values], (err, result) => {
     if (err) {
