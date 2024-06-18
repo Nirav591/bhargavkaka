@@ -21,6 +21,7 @@ exports.addTransactions = (req, res) => {
 };
 
 
+
 // Get all transactions for a customer along with total credit and debit
 exports.getCustomerTransactions = (req, res) => {
   const { id } = req.params;
