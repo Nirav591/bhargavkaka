@@ -17,6 +17,8 @@ exports.createCustomer = (req, res) => {
   );
 };
 
+
+
 // Add detail for a customer
 exports.addDetail = (req, res) => {
   const { customer_id, price, brokrage, broker_name, broker_mobile_number } = req.body;
@@ -82,4 +84,21 @@ exports.deleteCustomer = (req, res) => {
       });
     }
   });
+};
+
+exports.updateCustomer = (req, res) => {
+  const { id } = req.params;
+  const { name, mobile_number } = req.body;
+
+  db.query(
+    'UPDATE customers SET name = ?, mobile_number = ? WHERE id = ?',
+    [name, mobile_number, id],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: 'Error occurred while updating customer' });
+      } else {
+        res.status(200).json({ message: 'Customer updated successfully' });
+      }
+    }
+  );
 };
