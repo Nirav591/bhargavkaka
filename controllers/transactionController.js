@@ -69,11 +69,11 @@ exports.deleteTransaction = (req, res) => {
 // Update a transaction by ID
 exports.updateTransaction = (req, res) => {
   const { id } = req.params;
-  const { reason, amount, reference_number, name } = req.body;
+  const { reason, amount, reference_number, name, date } = req.body;
 
   db.query(
-    'UPDATE transactions SET reason = ?, amount = ?, reference_number = ?, name = ? WHERE id = ?',
-    [reason, amount, reference_number, name, id],
+    'UPDATE transactions SET reason = ?, amount = ?, reference_number = ?, name = ?, date = ? WHERE id = ?',
+    [reason, amount, reference_number, name, date, id],
     (err, result) => {
       if (err) {
         res.status(500).json({ message: 'Error occurred while updating transaction' });
