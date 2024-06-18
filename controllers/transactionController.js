@@ -8,8 +8,8 @@ exports.addTransactions = (req, res) => {
     return res.status(400).json({ message: 'Invalid transactions data' });
   }
 
-  const query = 'INSERT INTO transactions (customer_id, type, amount, reason, date) VALUES ?';
-  const values = transactions.map(t => [t.customer_id, t.type, t.amount, t.reason, t.date]);
+  const query = 'INSERT INTO transactions (customer_id, type, amount, reason, date, reference_number, name) VALUES ?';
+  const values = transactions.map(t => [t.customer_id, t.type, t.amount, t.reason, t.date, t.reference_number, t.name]);
 
   db.query(query, [values], (err, result) => {
     if (err) {
@@ -19,6 +19,7 @@ exports.addTransactions = (req, res) => {
     }
   });
 };
+
 
 // Get all transactions for a customer along with total credit and debit
 exports.getCustomerTransactions = (req, res) => {
