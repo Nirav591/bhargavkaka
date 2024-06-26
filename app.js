@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const customerRoutes = require('./routes/customerRoutes');
+const companyRoutes = require('./routes/companyRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const CtransactionRoutes = require('./routes/CtransactionRoutes');
 const cors = require('cors');
 
 const app = express();
@@ -22,6 +24,8 @@ app.use(bodyParser.json());
 app.use('/api/user', userRoutes);
 app.use('/api/customer', customerRoutes);
 app.use('/api/transaction', transactionRoutes);
+app.use('/api/CtransactionRoutes', CtransactionRoutes);
+app.use('/api/companyRoutes', companyRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
