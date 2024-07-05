@@ -1,32 +1,28 @@
 const db = require('../config/db');
 
 // Create a new customer
-exports.createCustomer = (req, res) => {
+const createCustomer = async (req, res) => {
   const { name, mobile_number, company_id } = req.body;
 
-  // Fetch company_tag from the companies table based on company_id
-  db.query('SELECT company_tag FROM companies WHERE id = ?', [company_id], (err, companyResult) => {
-    if (err) {
-      res.status(500).json({ message: 'Error occurred while fetching company information' });
-    } else if (companyResult.length === 0) {
-      res.status(404).json({ message: 'Company not found' });
-    } else {
-      const company_tag = companyResult[0].company_tag;
+  // Check if company exists
+  const company = await db.query('SELECT * FROM companies WHERE id = ?', [company_id]);
+  if (company.length === 0) {
+    return res.status(404).json({ message: 'Company not found' });
+  }
 
-      // Insert customer details along with company_tag
-      db.query(
-        'INSERT INTO customers (name, mobile_number, company_tag) VALUES (?, ?, ?)',
-        [name, mobile_number, company_tag],
-        (err, result) => {
-          if (err) {
-            res.status(500).json({ message: 'Error occurred while creating customer' });
-          } else {
-            res.status(201).json({ message: 'Customer created successfully', customerId: result.insertId });
-          }
-        }
-      );
+  // Proceed with customer creation
+  db.query(
+    'INSERT INTO customers (name, mobile_number, company_id) VALUES (?, ?, ?)',
+    [name, mobile_number, company_id],
+    (err, result) => {
+      if (err) {
+        console.error('Error creating customer:', err);
+        res.status(500).json({ message: 'Failed to create customer' });
+      } else {
+        res.status(201).json({ message: 'Customer created successfully', customerId: result.insertId });
+      }
     }
-  });
+  );
 };
 
 // Add detail for a customer
