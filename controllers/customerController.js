@@ -17,8 +17,6 @@ exports.createCustomer = (req, res) => {
   );
 };
 
-
-
 // Add detail for a customer
 exports.addDetail = (req, res) => {
   const { customer_id, price, brokrage, broker_name, broker_mobile_number } = req.body;
@@ -67,7 +65,6 @@ exports.getAllCustomers = (req, res) => {
   });
 };
 
-
 exports.deleteCustomer = (req, res) => {
   const { id } = req.params;
 
@@ -102,4 +99,3 @@ exports.updateCustomer = (req, res) => {
     }
   );
 };
-

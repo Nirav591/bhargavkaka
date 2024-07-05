@@ -4,9 +4,12 @@ const db = require('../config/db');
 exports.createCompany = (req, res) => {
   const { name, address, contact_number } = req.body;
 
+  // Generate the company tag by replacing spaces with hyphens and converting to lowercase
+  const company_tag = name.toLowerCase().replace(/ /g, '-');
+
   db.query(
-    'INSERT INTO companies (name, address, contact_number) VALUES (?, ?, ?)',
-    [name, address, contact_number],
+    'INSERT INTO companies (name, address, contact_number, company_tag) VALUES (?, ?, ?, ?)',
+    [name, address, contact_number, company_tag],
     (err, result) => {
       if (err) {
         res.status(500).json({ message: 'Error occurred while creating company' });
