@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 // Create a new customer
-const createCustomer = async (req, res) => {
+exports.createCustomer = async (req, res) => {
   const { name, mobile_number, company_id } = req.body;
 
   // Check if company exists
